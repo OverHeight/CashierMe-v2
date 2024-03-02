@@ -1,9 +1,10 @@
+const Pelanggan = require("../models/PelangganModel");
 const Penjualan = require("../models/PenjualanModel");
 
 const getPenjualan = async (req, res) => {
   try {
     const response = await Penjualan.findAll();
-    if (response.length > 0) {
+    if (response.length < 0) {
       return res.status(404).json({ msg: "Tidak ada Penjualan" });
     }
     return res.status(200).send(response);
@@ -25,7 +26,7 @@ const getPenjualanById = async (req, res) => {
 const createPenjualan = async (req, res) => {
   try {
     const { ...payload } = req.body;
-    const check = req.body.PelangganId;
+    const check = Pelanggan.findByPk(payload.pelangganId);
     if (!check)
       return res.status(404).send({ msg: "No Pelanggan Founded with this ID" });
     const response = await Penjualan.create({ ...payload });

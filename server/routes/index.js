@@ -1,5 +1,6 @@
 const PelangganRoute = require("./PelangganRoute");
 const PenjualanRoute = require("./PenjualanRoute");
+const DetailPenjualanRoute = require("./DetailPenjualanRoute");
 const ProdukRoute = require("./ProdukRoute");
 const AuthRoute = require("./AuthRoute");
 const UserRoute = require("./UserRoute");
@@ -11,6 +12,7 @@ const routes = () => {
 
   app.use("/pelanggan", PelangganRoute);
   app.use("/penjualan", PenjualanRoute);
+  app.use("/detail-penjualan", DetailPenjualanRoute);
   app.use("/produk", ProdukRoute);
   app.use("/auth", AuthRoute);
   app.use("/user", UserRoute);

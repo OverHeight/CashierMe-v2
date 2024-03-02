@@ -1,6 +1,9 @@
+import { useEffect, useState } from "react";
 import { Avatar } from "./Avatar";
 
 export const UserDetails = () => {
+  const [name, setName] = useState("");
+
   return (
     <div className="flex justify-center items-center gap-3  w-max">
       <div className="container">

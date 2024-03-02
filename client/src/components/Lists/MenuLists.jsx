@@ -7,7 +7,7 @@ export const MenuLists = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5005/produk")
+      .get("http://localhost:5005/api/produk")
       .then((response) => setProducts(response.data))
       .catch((error) => console.error(error));
   }, []);

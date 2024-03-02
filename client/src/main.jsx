@@ -8,6 +8,7 @@ import Dashboard from "./pages/App";
 import Resources from "./pages/App/Resources";
 import Menu from "./pages/App/Menu";
 import AddItem from "./pages/App/Add";
+import History from "./pages/App/History";
 
 const router = createBrowserRouter([
   {
@@ -33,6 +34,10 @@ const router = createBrowserRouter([
   {
     path: "app/resources/add",
     element: <AddItem />,
+  },
+  {
+    path: "app/history",
+    element: <History />,
   },
 ]);
 

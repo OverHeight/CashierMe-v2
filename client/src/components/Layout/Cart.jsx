@@ -1,13 +1,42 @@
+import { useEffect, useState } from "react";
+import { UseGetPelanggan } from "../../api/PelangganAPI";
 import { CartList } from "../Lists/CartList";
+import axios from "axios";
 
 export const Cart = () => {
+  const [selectedPelanggan, setSelectedPelanggan] = useState("");
+  const [pelanggan, setPelanggan] = useState([]);
+  console.log(pelanggan);
+
+  const handleSelect = (e) => {
+    setSelectedPelanggan(e.target.value);
+    console.log(e);
+  };
+  console.log(selectedPelanggan);
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:5005/api/pelanggan")
+      .then((response) => setPelanggan(response.data))
+      .catch((err) => console.error(err));
+  }, []);
+
   return (
     <div className="flex-col w-full h-full border-l-2">
       <div className="container bg-primary p-4">
         <span className="text-2xl font-semibold text-white">Order Details</span>
       </div>
       <div className="flex items-center text-sm border-b-2 justify-between p-2">
-        <p className="font-semibold">Juan Lewis</p>
+        <select className="select select-xs select-ghost w-max max-w-xs">
+          <option disabled selected>
+            select Pelanggan
+          </option>
+          {pelanggan.map((el, index) => (
+            <option onClick={handleSelect} value={el.id} key={index}>
+              {index + 1} {el.namaPelanggan}
+            </option>
+          ))}
+        </select>
         <p>Order Number</p>
       </div>
       <div className="flex flex-col p-2">

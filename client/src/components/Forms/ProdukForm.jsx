@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { UsePostProduct } from "../../api/Product/index";
+import { UsePostProduct } from "../../api/ProductAPI";
 
 const ProdukForm = () => {
   const [payload, setPayload] = useState({});
@@ -30,69 +30,71 @@ const ProdukForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="p-4">
-      <div>
-        <label className="form-control w-full max-w-xs">
-          <div className="label">
-            <span className="label-text">Nama Produk: </span>
-          </div>
-          <input
-            type="text"
-            id="namaProduk"
-            className="input input-bordered w-full max-w-xs"
-            onChange={handleChange}
-            required
-          />
-        </label>
-      </div>
-      <div>
-        <label className="form-control w-full max-w-xs">
-          <div className="label">
-            <span className="label-text">Harga: </span>
-          </div>
-          <input
-            type="number"
-            id="harga"
-            className="input input-bordered w-full max-w-xs"
-            onChange={handleChange}
-            step="0.01"
-            required
-          />
-        </label>
-      </div>
-      <div>
-        <label className="form-control w-full max-w-xs">
-          <div className="label">
-            <span className="label-text">Stok: </span>
-          </div>
-          <input
-            type="number"
-            id="stok"
-            className="input input-bordered w-full max-w-xs"
-            onChange={handleChange}
-            required
-          />
-        </label>
-      </div>
-      <div>
-        <label className="form-control w-full max-w-xs">
-          <div className="label">
-            <span className="label-text">Foto: </span>
-          </div>
-          <input
-            type="file"
-            id="image"
-            onChange={handleChange}
-            className="file-input file-input-bordered w-full max-w-xs"
-          />
-        </label>
-      </div>
-      <div className="container my-4">
-        <button type="submit" className="btn text-white btn-primary">
-          Submit
-        </button>
-      </div>
-    </form>
+    <>
+      <form onSubmit={handleSubmit} className="p-4">
+        <div>
+          <label className="form-control w-full max-w-xs">
+            <div className="label">
+              <span className="label-text">Nama Produk: </span>
+            </div>
+            <input
+              type="text"
+              id="namaProduk"
+              className="input input-bordered w-full max-w-xs"
+              onChange={handleChange}
+              required
+            />
+          </label>
+        </div>
+        <div>
+          <label className="form-control w-full max-w-xs">
+            <div className="label">
+              <span className="label-text">Harga: </span>
+            </div>
+            <input
+              type="number"
+              id="harga"
+              className="input input-bordered w-full max-w-xs"
+              onChange={handleChange}
+              step="0.01"
+              required
+            />
+          </label>
+        </div>
+        <div>
+          <label className="form-control w-full max-w-xs">
+            <div className="label">
+              <span className="label-text">Stok: </span>
+            </div>
+            <input
+              type="number"
+              id="stok"
+              className="input input-bordered w-full max-w-xs"
+              onChange={handleChange}
+              required
+            />
+          </label>
+        </div>
+        <div>
+          <label className="form-control w-full max-w-xs">
+            <div className="label">
+              <span className="label-text">Foto: </span>
+            </div>
+            <input
+              type="file"
+              id="image"
+              onChange={handleChange}
+              className="file-input file-input-bordered w-full max-w-xs"
+            />
+          </label>
+        </div>
+        <div className="container my-4">
+          <button type="submit" className="btn text-white btn-primary">
+            Submit
+          </button>
+        </div>
+      </form>
+    </>
   );
 };
 

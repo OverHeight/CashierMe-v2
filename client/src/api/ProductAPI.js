@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 
-const baseUrl = "http://localhost:5005/produk";
+const baseUrl = "http://localhost:5005/api/produk";
 
 const useGetProduct = () => {
   const [products, setProducts] = useState([]);

@@ -8,59 +8,32 @@ const { generateToken } = require("../utils");
 
 const login = async (req, res) => {
   try {
-    console.log("trying to auth");
     const { error } = validateLogin(req.body);
-    if (error)
-      return res
-        .status(500)
-        .send({ message: "Internal Server Error", error: error });
+    if (error) return res.status(400).send({ message: "Validation error", error: error });
 
     const user = await User.findOne({ where: { username: req.body.username } });
     if (!user) return res.status(404).send({ message: "User not found" });
 
-    const payload = {
-      username: req.body.username,
-      password: req.body.password,
-    };
+    const validPassword = await bcrypt.compare(req.body.password, user.password);
+    if (!validPassword) return res.status(401).send({ message: "Invalid password" });
 
-    const validPassword = await bcrypt.compare(
-      req.body.password,
-      user.password
-    );
-    if (!validPassword)
-      return res.status(401).send({ message: "Invalid password" });
-
-    const token = generateToken(payload);
-    const usId = user.id;
-
-    const session = await User.findByPk(usId);
-    if (!session) {
-      await User.destroy({ where: { id: usId } });
-
-      await User.create({
-        username: req.body.username,
-        password: user.password,
-        token,
-      });
-    } else {
-      user.token = token;
-      await user.save();
-    }
+    const token = generateToken({ id: user.id, username: user.username });
+    user.token = token;
+    await user.save();
 
     return res
       .status(200)
       .header({
         "Content-Type": "application/json",
-        authorization: `bearer${token}`,
-        "User-Id": user.id,
+        "Authorization": `Bearer ${token}`,
+        "X-User-Id": user.id,
       })
-      .send({ message: "Logged in Successfully", authorization: token });
+      .send({ message: "Logged in successfully", authorization: token });
   } catch (error) {
-    return res
-      .status(500)
-      .send({ message: "Internal server error", error: error.message });
+    return res.status(500).send({ message: "Internal server error", error: error.message });
   }
 };
+
 
 const register = async (req, res) => {
   try {

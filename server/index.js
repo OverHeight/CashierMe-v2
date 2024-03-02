@@ -23,11 +23,15 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage });
 
+const corsOptions = {
+  allowedHeaders: ['Authorization', 'Content-Type'],
+};
+
 const app = express();
 const port = process.env.PORT || 5005;
 app.use(express.json());
 app.use("/images", express.static(path.join(__dirname, "public", "images")));
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.urlencoded({ extended: true }));
 
 // routes

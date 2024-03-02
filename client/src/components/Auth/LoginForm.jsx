@@ -1,14 +1,20 @@
 import { useState } from "react";
 import UseLoginHook from "../../api/authAPI";
-// import { useNavigate } from "react-router-dom";
-// const navigate = useNavigate();
+import { useNavigate } from "react-router-dom";
 
 export const LoginForm = () => {
+  const navigate = useNavigate();
   const [payload, setPayload] = useState({ username: "", password: "" });
-  const handleSubmit = (e) => {
+  const [errorMsg, setErrorMsg] = useState("");
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    UseLoginHook(payload);
-    // navigate("/");
+    try {
+      const { response } = await UseLoginHook(payload);
+      if (response === 200) navigate("/app");
+      else setErrorMsg(response);
+    } catch (error) {
+      setErrorMsg(error.message);
+    }
   };
 
   const handleChange = ({ currentTarget: input }) => {
@@ -52,6 +58,7 @@ export const LoginForm = () => {
             Forgot password
           </a>
         </div>
+        {errorMsg ? `Error: ${errorMsg}` : null}
         <div className="flex justify-center">
           <button
             onClick={handleSubmit}

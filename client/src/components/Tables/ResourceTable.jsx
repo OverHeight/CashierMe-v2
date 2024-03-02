@@ -2,7 +2,9 @@ import axios from "axios";
 import { FaPlusCircle } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { UseDeleteProduct } from "../../api/Product";
+import { UseDeleteProduct } from "../../api/ProductAPI";
+import { UseDeletePelanggan } from "../../api/PelangganAPI";
+import { UseDeleteDetailPenjualan } from "../../api/DetailPenjualanAPI";
 
 export const ResourceTable = ({ resource }) => {
   const navigate = useNavigate();
@@ -12,23 +14,31 @@ export const ResourceTable = ({ resource }) => {
   const data = [
     {
       name: "produk",
-      url: "http://localhost:5005/produk",
+      url: "http://localhost:5005/api/produk",
       clientUrl: "add/produk",
       headers: ["ID", "Image", "Nama Produk", "Harga", "Stok"],
       table: ["id", "", "namaProduk", "harga", "stok"],
+      click: () => UseDeleteProduct(row.id),
     },
     {
       name: "pelanggan",
-      url: "http://localhost:5005/pelanggan",
+      url: "http://localhost:5005/api/pelanggan",
       clientUrl: "add/pelanggan",
       headers: ["ID", "Nama Pelanggan", "Alamat", "Nomor Telepon"],
       table: ["Id", "namaPelanggan", "alamat", "nomorTelepon"],
+      deleteAPI: UseDeletePelanggan,
     },
     {
       name: "penjualan",
-      url: "http://localhost:5005/penjualan",
+      url: "http://localhost:5005/api/penjualan",
       clientUrl: "add/penjualan",
-      headers: ["ID", "Tanggal Penjualan", "Total", "Id Pelanggan"],
+      headers: [
+        "ID",
+        "Tanggal Penjualan",
+        "Total",
+        "Id Pelanggan",
+        "Created At",
+      ],
       table: [
         "id",
         "tanggalPenjualan",
@@ -36,16 +46,34 @@ export const ResourceTable = ({ resource }) => {
         "pelangganId",
         "CreatedAt",
       ],
+      deleteAPI: UseDeleteDetailPenjualan,
     },
     {
       name: "detailpenjualan",
-      url: "http://localhost:5005/detailpenjualan",
+      url: "http://localhost:5005/api/detail-penjualan",
       clientUrl: "add/detailpenjualan",
-      headers: ["ID", "Date", "Amount"],
+      headers: [
+        "ID",
+        "Nama Pelanggan",
+        "Jumlah Produk",
+        "Sub Total",
+        "Penjualan Id",
+        "Id Produk",
+        "Created At",
+      ],
+      table: [
+        "id",
+        "namaPelanggan",
+        "jumlahProduk",
+        "subTotal",
+        "penjualanId",
+        "produkId",
+        "createdAt",
+      ],
     },
     {
       name: "user",
-      url: "http://localhost:5005/user",
+      url: "http://localhost:5005/api/user",
       clientUrl: "add/user",
       headers: [
         "ID",
@@ -83,6 +111,13 @@ export const ResourceTable = ({ resource }) => {
         .get(baseUrl)
         .then((response) => setValue(response.data))
         .catch((err) => console.error(err));
+    }
+  }, [baseUrl]);
+
+  useEffect(() => {
+    if (value.length > 0) {
+      // Do something here to handle data refreshing after deletion
+      console.log("Data refreshed after deletion:", value);
     }
   }, [value]);
 
@@ -129,7 +164,7 @@ export const ResourceTable = ({ resource }) => {
                     Edit
                   </button>
                   <button
-                    onClick={() => UseDeleteProduct(row.id)}
+                    onClick={() => row.id}
                     className="btn bg-stone-500 btn-sm text-white"
                   >
                     Delete

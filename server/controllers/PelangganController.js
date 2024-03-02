@@ -3,7 +3,7 @@ const Pelanggan = require("../models/PelangganModel");
 const getPelanggan = async (req, res) => {
   try {
     const response = await Pelanggan.findAll();
-    if (response.length > 0) {
+    if (response.length < 0) {
       return res.status(404).json({ msg: "Tidak ada pelanggan" });
     }
     return res.status(200).send(response);
@@ -28,17 +28,13 @@ const createPelanggan = async (req, res) => {
     console.log(payload);
     const dataCheck = await Pelanggan.findOne({
       where: {
-        NomorTelepon: req.body.NomorTelepon,
+        nomorTelepon: req.body.nomorTelepon,
       },
     });
     if (dataCheck) {
       return res.status(409).send({ msg: "Nomor telepon telah digunakan" });
     }
-    const response = await Pelanggan.create({
-      NamaPelanggan: req.body.NamaPelanggan,
-      Alamat: req.body.Alamat,
-      NomorTelepon: req.body.NomorTelepon,
-    });
+    const response = await Pelanggan.create({ ...payload });
     return res
       .status(201)
       .send({ msg: "Successfully Created Pelanggan" + response });
