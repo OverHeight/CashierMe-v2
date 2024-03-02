@@ -1,0 +1,145 @@
+import axios from "axios";
+import { FaPlusCircle } from "react-icons/fa";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { UseDeleteProduct } from "../../api/Product";
+
+export const ResourceTable = ({ resource }) => {
+  const navigate = useNavigate();
+  const [value, setValue] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [baseUrl, setBaseUrl] = useState("");
+  const data = [
+    {
+      name: "produk",
+      url: "http://localhost:5005/produk",
+      clientUrl: "add/produk",
+      headers: ["ID", "Image", "Nama Produk", "Harga", "Stok"],
+      table: ["id", "", "namaProduk", "harga", "stok"],
+    },
+    {
+      name: "pelanggan",
+      url: "http://localhost:5005/pelanggan",
+      clientUrl: "add/pelanggan",
+      headers: ["ID", "Nama Pelanggan", "Alamat", "Nomor Telepon"],
+      table: ["Id", "namaPelanggan", "alamat", "nomorTelepon"],
+    },
+    {
+      name: "penjualan",
+      url: "http://localhost:5005/penjualan",
+      clientUrl: "add/penjualan",
+      headers: ["ID", "Tanggal Penjualan", "Total", "Id Pelanggan"],
+      table: [
+        "id",
+        "tanggalPenjualan",
+        "totalHarga",
+        "pelangganId",
+        "CreatedAt",
+      ],
+    },
+    {
+      name: "detailpenjualan",
+      url: "http://localhost:5005/detailpenjualan",
+      clientUrl: "add/detailpenjualan",
+      headers: ["ID", "Date", "Amount"],
+    },
+    {
+      name: "user",
+      url: "http://localhost:5005/user",
+      clientUrl: "add/user",
+      headers: [
+        "ID",
+        "Username",
+        "Email",
+        "Password",
+        "Is Admin",
+        "Token",
+        "Created At",
+      ],
+      table: [
+        "id",
+        "username",
+        "email",
+        "password",
+        "isAdmin",
+        "token",
+        "createdAt",
+      ],
+    },
+  ];
+
+  useEffect(() => {
+    const selectedObject = data.find((el) => el.name === resource);
+    if (selectedObject) {
+      setBaseUrl(selectedObject.url);
+    }
+    setTimeout(10000);
+    setIsLoading(false);
+  }, [resource]);
+
+  useEffect(() => {
+    if (baseUrl) {
+      axios
+        .get(baseUrl)
+        .then((response) => setValue(response.data))
+        .catch((err) => console.error(err));
+    }
+  }, [value]);
+
+  console.log(value);
+
+  if (!resource || isLoading)
+    return (
+      <div className="flex p-10 w-full h-52 justify-center items-center skeleton"></div>
+    );
+
+  return (
+    <>
+      <div className="overflow-x-auto max-w-6xl bg-neutral-200 rounded-lg">
+        <table className="table">
+          <thead className="bg-primary text-white">
+            <tr>
+              {data
+                .find((el) => el.name === resource)
+                ?.headers.map((header, index) => (
+                  <>
+                    <th key={index}>{header}</th>
+                  </>
+                ))}
+              <th className="w-24 items-end">
+                <button
+                  onClick={() => navigate("/app/resources/add")}
+                  className="btn btn-ghost w-full"
+                >
+                  <FaPlusCircle size={30} />
+                </button>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {value.map((row, rowIndex) => (
+              <tr key={rowIndex}>
+                {data
+                  .find((el) => el.name === resource)
+                  ?.table.map((data, index) => (
+                    <td key={index}>{row[data]}</td>
+                  ))}
+                <td className="flex gap-2">
+                  <button className="btn bg-base-content btn-sm text-white">
+                    Edit
+                  </button>
+                  <button
+                    onClick={() => UseDeleteProduct(row.id)}
+                    className="btn bg-stone-500 btn-sm text-white"
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </>
+  );
+};
